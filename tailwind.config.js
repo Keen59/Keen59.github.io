@@ -5,10 +5,10 @@ export default {
     extend: {
       colors: {
         brand: {
-          DEFAULT: '#FF4D2E',
-          dark: '#E03A1C',
-          light: '#FF7A63',
-          muted: '#FFE8E3',
+          DEFAULT: '#7C3AED',
+          dark: '#5B21B6',
+          light: '#A78BFA',
+          muted: '#EDE9FE',
         },
         harbor: {
           DEFAULT: '#0A1628',
@@ -35,7 +35,7 @@ export default {
       },
       boxShadow: {
         card: '0 8px 24px rgba(10, 22, 40, 0.06)',
-        lift: '0 12px 32px rgba(255, 77, 46, 0.18)',
+        lift: '0 12px 32px rgba(124, 58, 237, 0.22)',
       },
       backgroundImage: {
         'harbor-grid':

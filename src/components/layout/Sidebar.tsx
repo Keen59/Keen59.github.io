@@ -63,7 +63,7 @@ export function Sidebar() {
             className={({ isActive }) =>
               `flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
                 isActive
-                  ? 'bg-white/10 text-white shadow-[inset_3px_0_0_0_#FF4D2E]'
+                  ? 'bg-white/10 text-white shadow-[inset_3px_0_0_0_#7C3AED]'
                   : 'text-white/55 hover:bg-white/5 hover:text-white'
               }`
             }
