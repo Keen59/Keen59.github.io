@@ -4,11 +4,11 @@ import { Sidebar } from './Sidebar'
 
 export function AppLayout() {
   return (
-    <div className="min-h-full bg-surface">
+    <div className="min-h-full bg-surface bg-harbor-grid bg-grid">
       <Sidebar />
-      <div className="pl-16">
+      <div className="pl-56">
         <Header />
-        <main className="min-h-[calc(100vh-3.5rem)] p-4 lg:p-6">
+        <main className="min-h-[calc(100vh-4rem)] p-4 lg:p-6">
           <Outlet />
         </main>
       </div>

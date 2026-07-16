@@ -26,16 +26,16 @@ export function DashboardPage() {
             Shipping overview for the selected period
           </p>
         </div>
-        <div className="flex flex-wrap gap-1 rounded-xl bg-white p-1 shadow-card">
+        <div className="flex flex-wrap gap-1 rounded-2xl border border-harbor/8 bg-white p-1 shadow-card">
           {periods.map((p) => (
             <button
               key={p}
               type="button"
               onClick={() => setPeriod(p)}
-              className={`rounded-lg px-3 py-1.5 text-xs font-semibold uppercase tracking-wide transition ${
+              className={`rounded-xl px-3 py-1.5 text-xs font-semibold uppercase tracking-wide transition ${
                 period === p
-                  ? 'bg-brand text-white'
-                  : 'text-ink-muted hover:bg-gray-50 hover:text-ink'
+                  ? 'bg-harbor text-white'
+                  : 'text-ink-muted hover:bg-brand-muted hover:text-brand-dark'
               }`}
             >
               {p}

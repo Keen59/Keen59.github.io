@@ -21,15 +21,15 @@ const icons = {
 export function KpiCard({ stat }: { stat: KpiStat }) {
   const Icon = icons[stat.icon]
   return (
-    <div className="card flex items-center gap-3 p-4">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-muted text-brand">
+    <div className="card flex items-center gap-3 p-4 transition hover:-translate-y-0.5 hover:shadow-lift">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-harbor text-brand">
         <Icon className="h-5 w-5" />
       </div>
       <div className="min-w-0">
-        <p className="truncate text-xs font-medium uppercase tracking-wide text-ink-muted">
+        <p className="truncate text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-muted">
           {stat.label}
         </p>
-        <p className="truncate text-lg font-bold text-ink">{stat.value}</p>
+        <p className="truncate text-xl font-bold text-ink">{stat.value}</p>
       </div>
     </div>
   )
@@ -48,8 +48,8 @@ export function SectionCard({
 }) {
   return (
     <div className={`card overflow-hidden ${className}`}>
-      <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
-        <h3 className="text-sm font-semibold uppercase tracking-wide text-ink">
+      <div className="flex items-center justify-between border-b border-harbor/5 bg-gradient-to-r from-brand-muted/40 to-transparent px-4 py-3">
+        <h3 className="text-sm font-bold uppercase tracking-[0.12em] text-ink">
           {title}
         </h3>
         {action}

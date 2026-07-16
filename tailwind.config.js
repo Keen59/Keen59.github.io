@@ -5,27 +5,44 @@ export default {
     extend: {
       colors: {
         brand: {
-          DEFAULT: '#1f9b8a',
-          dark: '#178074',
-          light: '#2cb5a3',
-          muted: '#e6f6f3',
+          DEFAULT: '#FF4D2E',
+          dark: '#E03A1C',
+          light: '#FF7A63',
+          muted: '#FFE8E3',
+        },
+        harbor: {
+          DEFAULT: '#0A1628',
+          soft: '#132337',
+          mist: '#1C334F',
+        },
+        steel: {
+          DEFAULT: '#1B6EF3',
+          muted: '#E8F0FE',
         },
         ink: {
-          DEFAULT: '#1a1d23',
-          soft: '#2a2f38',
-          muted: '#6b7280',
+          DEFAULT: '#0A1628',
+          soft: '#243447',
+          muted: '#5A6B7D',
         },
         surface: {
-          DEFAULT: '#f3f4f6',
-          card: '#ffffff',
-          dark: '#1e2229',
+          DEFAULT: '#E8EEF5',
+          card: '#FFFFFF',
+          dark: '#0A1628',
         },
       },
       fontFamily: {
-        sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
+        sans: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        card: '0 1px 3px rgba(16, 24, 40, 0.06), 0 1px 2px rgba(16, 24, 40, 0.04)',
+        card: '0 8px 24px rgba(10, 22, 40, 0.06)',
+        lift: '0 12px 32px rgba(255, 77, 46, 0.18)',
+      },
+      backgroundImage: {
+        'harbor-grid':
+          'linear-gradient(rgba(10,22,40,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(10,22,40,0.04) 1px, transparent 1px)',
+      },
+      backgroundSize: {
+        grid: '28px 28px',
       },
     },
   },

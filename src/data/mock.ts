@@ -54,7 +54,7 @@ export interface Ticket {
 export interface OverweightRow {
   id: string
   date: string
-  teikerId: string
+  shipPierId: string
   guide: string
   carrier: string
   shippingType: string
@@ -89,7 +89,7 @@ export const CARRIER_USAGE: CarrierUsage[] = [
 ]
 
 export const DELIVERY_AVG: DeliveryAvg[] = [
-  { id: '1', carrier: 'Teiker Express', days: 1.5, speed: 'Fast' },
+  { id: '1', carrier: 'ShipPier Express', days: 1.5, speed: 'Fast' },
   { id: '2', carrier: 'DHL', days: 2.1, speed: 'Fast' },
   { id: '3', carrier: 'Estafeta', days: 3.4, speed: 'Normal' },
   { id: '4', carrier: 'FedEx', days: 2.8, speed: 'Normal' },
@@ -233,7 +233,7 @@ export const OVERWEIGHT_ROWS: OverweightRow[] = [
   {
     id: '1',
     date: '2026-07-15',
-    teikerId: 'TK-45021',
+    shipPierId: 'SP-45021',
     guide: 'ESTA784512369',
     carrier: 'Estafeta',
     shippingType: 'Ground',
@@ -247,7 +247,7 @@ export const OVERWEIGHT_ROWS: OverweightRow[] = [
   {
     id: '2',
     date: '2026-07-14',
-    teikerId: 'TK-45018',
+    shipPierId: 'SP-45018',
     guide: 'FDX998877665',
     carrier: 'FedEx',
     shippingType: 'Express',
@@ -261,7 +261,7 @@ export const OVERWEIGHT_ROWS: OverweightRow[] = [
   {
     id: '3',
     date: '2026-07-13',
-    teikerId: 'TK-44990',
+    shipPierId: 'SP-44990',
     guide: 'DHL112233445',
     carrier: 'DHL',
     shippingType: 'Ground',

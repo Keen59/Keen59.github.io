@@ -77,8 +77,8 @@ export function BalancePage() {
 
           <div className="card space-y-3 p-5">
             <h3 className="font-bold text-ink">Bank Transfer</h3>
-            <InfoRow label="Bank" value="Teiker Bank" />
-            <InfoRow label="Beneficiary" value="Teiker Logistics SA" />
+            <InfoRow label="Bank" value="ShipPier Bank" />
+            <InfoRow label="Beneficiary" value="ShipPier Logistics SA" />
             <InfoRow label="Tax ID" value="TKR880101XXX" />
             <InfoRow label="Account" value="012345678901234567" />
           </div>

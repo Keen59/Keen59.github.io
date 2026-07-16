@@ -7,7 +7,7 @@ export function OverweightPage() {
   const filtered = OVERWEIGHT_ROWS.filter(
     (r) =>
       r.guide.toLowerCase().includes(query.toLowerCase()) ||
-      r.teikerId.toLowerCase().includes(query.toLowerCase()),
+      r.shipPierId.toLowerCase().includes(query.toLowerCase()),
   )
 
   return (
@@ -61,7 +61,7 @@ export function OverweightPage() {
                   Date
                 </th>
                 <th className="px-3 py-2" rowSpan={2}>
-                  Teiker #
+                  ShipPier #
                 </th>
                 <th className="px-3 py-2" rowSpan={2}>
                   Guide #
@@ -73,25 +73,25 @@ export function OverweightPage() {
                   Type
                 </th>
                 <th
-                  className="bg-sky-700 px-3 py-2 text-center"
+                  className="bg-steel px-3 py-2 text-center"
                   colSpan={3}
                 >
                   Declared on Label
                 </th>
                 <th
-                  className="bg-brand-dark px-3 py-2 text-center"
+                  className="bg-harbor px-3 py-2 text-center"
                   colSpan={3}
                 >
                   Detected at Hub
                 </th>
               </tr>
               <tr className="bg-ink-soft text-xs uppercase text-white">
-                <th className="bg-sky-600 px-3 py-2">Dims</th>
-                <th className="bg-sky-600 px-3 py-2">Weight</th>
-                <th className="bg-sky-600 px-3 py-2">Vol.</th>
-                <th className="bg-brand px-3 py-2">Dims</th>
-                <th className="bg-brand px-3 py-2">Weight</th>
-                <th className="bg-brand px-3 py-2">Vol.</th>
+                <th className="bg-steel/90 px-3 py-2">Dims</th>
+                <th className="bg-steel/90 px-3 py-2">Weight</th>
+                <th className="bg-steel/90 px-3 py-2">Vol.</th>
+                <th className="bg-harbor-mist px-3 py-2">Dims</th>
+                <th className="bg-harbor-mist px-3 py-2">Weight</th>
+                <th className="bg-harbor-mist px-3 py-2">Vol.</th>
               </tr>
             </thead>
             <tbody>
@@ -110,7 +110,7 @@ export function OverweightPage() {
                     <p className="text-ink-muted">{r.date}</p>
                   </td>
                   <td className="px-3 py-3 font-medium text-brand">
-                    {r.teikerId}
+                    {r.shipPierId}
                   </td>
                   <td className="px-3 py-3 font-medium text-ink">{r.guide}</td>
                   <td className="px-3 py-3 lowercase text-rose-600">

@@ -96,7 +96,7 @@ export function ShipmentsPage() {
         <div className="overflow-x-auto rounded-lg border border-gray-100">
           <table className="w-full min-w-[1100px] text-left text-sm">
             <thead>
-              <tr className="bg-ink text-xs uppercase tracking-wide text-white">
+              <tr className="bg-harbor text-xs uppercase tracking-wide text-white">
                 <th className="px-3 py-3 font-semibold">Shipment ID</th>
                 <th className="px-3 py-3 font-semibold">Tracking #</th>
                 <th className="px-3 py-3 font-semibold">Registered</th>
