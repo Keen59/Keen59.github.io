@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Eye } from 'lucide-react'
-import { TICKETS } from '../data/mock'
+import { TICKETS, TICKET_STATS } from '../data/mock'
 import { TicketBadge } from '../components/StatusBadge'
 
 const filters = ['All', 'In Tracking', 'Closed'] as const
@@ -28,11 +28,7 @@ export function TicketsPage() {
     )
   }, [filter, query])
 
-  const stats = {
-    total: 237,
-    tracking: 15,
-    closed: 222,
-  }
+  const stats = TICKET_STATS
 
   return (
     <div className="space-y-5">
@@ -52,7 +48,7 @@ export function TicketsPage() {
       <div className="grid gap-3 sm:grid-cols-3">
         <MiniStat label="Listed" value={stats.total} />
         <MiniStat label="Active" value={stats.tracking} />
-        <MiniStat label="Average" value={5} />
+        <MiniStat label="Average" value={stats.average} />
       </div>
 
       <div className="card p-4">

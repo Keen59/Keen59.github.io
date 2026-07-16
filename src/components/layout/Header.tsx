@@ -35,7 +35,7 @@ export function Header() {
           className="flex items-center gap-2 rounded-xl border border-brand/20 bg-brand-muted px-3 py-1.5 text-sm font-semibold text-brand-dark transition hover:bg-brand hover:text-white"
         >
           <span className="hidden sm:inline">{USER.balance}</span>
-          <span className="sm:hidden">$106k</span>
+          <span className="sm:hidden">{USER.balanceShort}</span>
           <span className="flex h-5 w-5 items-center justify-center rounded-lg bg-white/90 text-brand">
             <Plus className="h-3 w-3" />
           </span>

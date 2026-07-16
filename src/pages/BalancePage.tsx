@@ -1,13 +1,8 @@
-import { USER } from '../data/mock'
+import { BALANCE_STATS, USER } from '../data/mock'
 
-const stats = [
-  { label: 'Available Balance', value: USER.balance },
-  { label: 'Total Recharged', value: '$ 482,910.00' },
-  { label: 'This Month', value: '$ 38,420.00' },
-  { label: 'Average', value: '$ 12,140.00' },
-  { label: 'Last Recharge', value: '$ 5,000.00' },
-  { label: 'Applied Today', value: '$ 0.00' },
-]
+const stats = BALANCE_STATS.map((s, i) =>
+  i === 0 ? { ...s, value: USER.balance } : s,
+)
 
 export function BalancePage() {
   return (

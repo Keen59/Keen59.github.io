@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { OVERWEIGHT_ROWS } from '../data/mock'
+import { OVERWEIGHT_ROWS, OVERWEIGHT_SUMMARY } from '../data/mock'
 
 export function OverweightPage() {
   const [query, setQuery] = useState('')
@@ -27,8 +27,10 @@ export function OverweightPage() {
           <tbody>
             <tr>
               <td className="px-4 py-3 font-medium text-ink">No Dispute</td>
-              <td className="px-4 py-3">3005</td>
-              <td className="px-4 py-3 text-brand">1,341.52%</td>
+              <td className="px-4 py-3">{OVERWEIGHT_SUMMARY.quantity}</td>
+              <td className="px-4 py-3 text-brand">
+                {OVERWEIGHT_SUMMARY.percentage}
+              </td>
             </tr>
           </tbody>
         </table>
