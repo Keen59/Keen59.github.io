@@ -5,7 +5,6 @@ import { ShipmentsPage } from './pages/ShipmentsPage'
 import { QuotePage } from './pages/QuotePage'
 import { PackagesPage } from './pages/PackagesPage'
 import { TicketsPage } from './pages/TicketsPage'
-import { OverweightPage } from './pages/OverweightPage'
 import { SettingsPage } from './pages/SettingsPage'
 import { BalancePage } from './pages/BalancePage'
 
@@ -18,7 +17,6 @@ export default function App() {
         <Route path="quote" element={<QuotePage />} />
         <Route path="packages" element={<PackagesPage />} />
         <Route path="tickets" element={<TicketsPage />} />
-        <Route path="overweight" element={<OverweightPage />} />
         <Route path="settings" element={<SettingsPage />} />
         <Route path="balance" element={<BalancePage />} />
       </Route>

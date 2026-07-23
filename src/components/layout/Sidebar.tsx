@@ -4,7 +4,6 @@ import {
   Truck,
   ListOrdered,
   Ticket,
-  Scale,
   Settings,
   LogOut,
   Plus,
@@ -19,7 +18,6 @@ const mainNav = [
   { to: '/quote', icon: Calculator, label: 'Get Quote' },
   { to: '/packages', icon: Package, label: 'Packages' },
   { to: '/tickets', icon: Ticket, label: 'Tickets' },
-  { to: '/overweight', icon: Scale, label: 'Overweight' },
 ]
 
 const bottomNav = [{ to: '/settings', icon: Settings, label: 'Settings' }]

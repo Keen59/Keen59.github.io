@@ -51,21 +51,6 @@ export interface Ticket {
   shipmentId: string
 }
 
-export interface OverweightRow {
-  id: string
-  date: string
-  shipPierId: string
-  guide: string
-  carrier: string
-  shippingType: string
-  declaredDims: string
-  declaredWeight: string
-  declaredVol: string
-  actualDims: string
-  actualWeight: string
-  actualVol: string
-}
-
 export const USER = {
   name: 'Kaan Bayraktar',
   initials: 'KB',
@@ -236,56 +221,6 @@ export const TICKET_STATS = {
   closed: 141,
   average: 7,
 }
-
-export const OVERWEIGHT_SUMMARY = {
-  quantity: 1847,
-  percentage: '862.40%',
-}
-
-export const OVERWEIGHT_ROWS: OverweightRow[] = [
-  {
-    id: '1',
-    date: '2026-07-15',
-    shipPierId: 'SP-31884',
-    guide: 'DHL558291034',
-    carrier: 'DHL',
-    shippingType: 'Express',
-    declaredDims: '45 x 32 x 16',
-    declaredWeight: '3.40',
-    declaredVol: '4.61',
-    actualDims: '47 x 34 x 18',
-    actualWeight: '4.25',
-    actualVol: '5.78',
-  },
-  {
-    id: '2',
-    date: '2026-07-14',
-    shipPierId: 'SP-31852',
-    guide: 'UPS771204559',
-    carrier: 'UPS',
-    shippingType: 'Ground',
-    declaredDims: '38 x 28 x 22',
-    declaredWeight: '5.10',
-    declaredVol: '4.70',
-    actualDims: '39 x 29 x 24',
-    actualWeight: '6.05',
-    actualVol: '5.44',
-  },
-  {
-    id: '3',
-    date: '2026-07-12',
-    shipPierId: 'SP-31790',
-    guide: 'FDX330198762',
-    carrier: 'FedEx',
-    shippingType: 'Ground',
-    declaredDims: '55 x 41 x 27',
-    declaredWeight: '7.80',
-    declaredVol: '12.19',
-    actualDims: '56 x 43 x 28',
-    actualWeight: '9.15',
-    actualVol: '13.50',
-  },
-]
 
 export const BALANCE_STATS = [
   { label: 'Available Balance', value: '$ 64,812.47' },
