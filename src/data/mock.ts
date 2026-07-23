@@ -1,3 +1,5 @@
+export type ShipmentStage = 'first_transport' | 'warehouse' | 'second_transport'
+
 export type ShipmentStatus =
   | 'documented'
   | 'in_transit'
@@ -38,6 +40,9 @@ export interface Shipment {
   carrier: string
   status: ShipmentStatus
   progress: number
+  stage: ShipmentStage
+  origin?: string
+  warehouse?: string
 }
 
 export interface Ticket {
@@ -50,6 +55,36 @@ export interface Ticket {
   classification: string
   shipmentId: string
 }
+
+export const SHIPMENT_STAGES: {
+  id: ShipmentStage
+  step: number
+  label: string
+  short: string
+  description: string
+}[] = [
+  {
+    id: 'first_transport',
+    step: 1,
+    label: '1st Transport',
+    short: '1. Transport',
+    description: 'Supplier → Warehouse',
+  },
+  {
+    id: 'warehouse',
+    step: 2,
+    label: 'Warehouse',
+    short: 'Warehouse',
+    description: 'Receiving & processing',
+  },
+  {
+    id: 'second_transport',
+    step: 3,
+    label: '2nd Transport',
+    short: '2. Transport',
+    description: 'Warehouse → Customer',
+  },
+]
 
 export const USER = {
   name: 'Kaan Bayraktar',
@@ -92,6 +127,9 @@ export const RECENT_SHIPMENTS: Shipment[] = [
     carrier: 'DHL',
     status: 'in_transit',
     progress: 55,
+    stage: 'first_transport',
+    origin: 'Guangzhou, CN',
+    warehouse: 'Istanbul Hub',
   },
   {
     id: '70471',
@@ -103,39 +141,9 @@ export const RECENT_SHIPMENTS: Shipment[] = [
     carrier: 'UPS',
     status: 'documented',
     progress: 15,
-  },
-  {
-    id: '70455',
-    tracking: 'SPR7045548120',
-    registeredAt: '2026-07-16 11:03',
-    recipient: 'Amina Farouk',
-    address: 'Zamalek St 12, Cairo',
-    ecommerce: 'WooCommerce',
-    carrier: 'FedEx',
-    status: 'delivered',
-    progress: 100,
-  },
-  {
-    id: '70438',
-    tracking: 'SPR7043877442',
-    registeredAt: '2026-07-15 21:56',
-    recipient: 'Hiro Tanaka',
-    address: 'Shibuya 2-1, Tokyo',
-    ecommerce: 'Shopify',
-    carrier: 'DHL',
-    status: 'exception',
-    progress: 35,
-  },
-  {
-    id: '70422',
-    tracking: 'SPR7042266011',
-    registeredAt: '2026-07-15 14:28',
-    recipient: 'Elena Popov',
-    address: 'Nevsky 45, St. Petersburg',
-    ecommerce: 'Etsy',
-    carrier: 'UPS',
-    status: 'in_transit',
-    progress: 70,
+    stage: 'first_transport',
+    origin: 'Shenzhen, CN',
+    warehouse: 'Berlin Hub',
   },
   {
     id: '70409',
@@ -147,17 +155,23 @@ export const RECENT_SHIPMENTS: Shipment[] = [
     carrier: 'Estafeta',
     status: 'pending',
     progress: 8,
+    stage: 'first_transport',
+    origin: 'Yiwu, CN',
+    warehouse: 'Miami Hub',
   },
   {
-    id: '70391',
-    tracking: 'SPR7039144207',
-    registeredAt: '2026-07-14 19:45',
-    recipient: 'Chloe Martin',
-    address: 'Rue Lafayette 8, Lyon',
-    ecommerce: 'Amazon',
-    carrier: 'FedEx',
-    status: 'delivered',
-    progress: 100,
+    id: '70438',
+    tracking: 'SPR7043877442',
+    registeredAt: '2026-07-15 21:56',
+    recipient: 'Hiro Tanaka',
+    address: 'Shibuya 2-1, Tokyo',
+    ecommerce: 'Shopify',
+    carrier: 'DHL',
+    status: 'exception',
+    progress: 35,
+    stage: 'warehouse',
+    origin: 'Ningbo, CN',
+    warehouse: 'Tokyo Hub',
   },
   {
     id: '70374',
@@ -169,6 +183,65 @@ export const RECENT_SHIPMENTS: Shipment[] = [
     carrier: 'DHL',
     status: 'documented',
     progress: 22,
+    stage: 'warehouse',
+    origin: 'Guangzhou, CN',
+    warehouse: 'Dubai Hub',
+  },
+  {
+    id: '70490',
+    tracking: 'SPR7049088122',
+    registeredAt: '2026-07-16 09:30',
+    recipient: 'Sofia Alvarez',
+    address: 'Gran Via 22, Madrid',
+    ecommerce: 'WooCommerce',
+    carrier: 'UPS',
+    status: 'pending',
+    progress: 40,
+    stage: 'warehouse',
+    origin: 'Shanghai, CN',
+    warehouse: 'Madrid Hub',
+  },
+  {
+    id: '70455',
+    tracking: 'SPR7045548120',
+    registeredAt: '2026-07-16 11:03',
+    recipient: 'Amina Farouk',
+    address: 'Zamalek St 12, Cairo',
+    ecommerce: 'WooCommerce',
+    carrier: 'FedEx',
+    status: 'delivered',
+    progress: 100,
+    stage: 'second_transport',
+    origin: 'Guangzhou, CN',
+    warehouse: 'Cairo Hub',
+  },
+  {
+    id: '70422',
+    tracking: 'SPR7042266011',
+    registeredAt: '2026-07-15 14:28',
+    recipient: 'Elena Popov',
+    address: 'Nevsky 45, St. Petersburg',
+    ecommerce: 'Etsy',
+    carrier: 'UPS',
+    status: 'in_transit',
+    progress: 70,
+    stage: 'second_transport',
+    origin: 'Shenzhen, CN',
+    warehouse: 'Istanbul Hub',
+  },
+  {
+    id: '70391',
+    tracking: 'SPR7039144207',
+    registeredAt: '2026-07-14 19:45',
+    recipient: 'Chloe Martin',
+    address: 'Rue Lafayette 8, Lyon',
+    ecommerce: 'Amazon',
+    carrier: 'FedEx',
+    status: 'delivered',
+    progress: 100,
+    stage: 'second_transport',
+    origin: 'Yiwu, CN',
+    warehouse: 'Paris Hub',
   },
 ]
 
