@@ -23,7 +23,7 @@ const iconMap = {
 
 const links: Record<string, string> = {
   '7': '/balance',
-  '2': '/balance',
+  '2': '/transactions',
 }
 
 export function SettingsPage() {

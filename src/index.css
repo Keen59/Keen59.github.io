@@ -24,15 +24,15 @@
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark hover:shadow-lift;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-brand-ink transition hover:bg-brand-dark hover:shadow-lift;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-harbor/10 bg-white px-3 py-2 text-sm font-medium text-ink transition hover:border-brand/30 hover:bg-brand-muted;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-harbor/10 bg-white px-3 py-2 text-sm font-medium text-ink transition hover:border-brand/50 hover:bg-brand-muted;
   }
 
   .input {
-    @apply w-full rounded-xl border border-harbor/10 bg-white px-3 py-2.5 text-sm text-ink outline-none transition placeholder:text-ink-muted/60 focus:border-brand focus:ring-2 focus:ring-brand/15;
+    @apply w-full rounded-xl border border-harbor/10 bg-white px-3 py-2.5 text-sm text-ink outline-none transition placeholder:text-ink-muted/60 focus:border-brand-dark focus:ring-2 focus:ring-brand/40;
   }
 
   .badge {

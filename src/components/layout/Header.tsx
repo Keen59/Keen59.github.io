@@ -32,11 +32,11 @@ export function Header() {
 
         <Link
           to="/balance"
-          className="flex items-center gap-2 rounded-xl border border-brand/20 bg-brand-muted px-3 py-1.5 text-sm font-semibold text-brand-dark transition hover:bg-brand hover:text-white"
+          className="flex items-center gap-2 rounded-xl border border-brand/30 bg-brand-muted px-3 py-1.5 text-sm font-semibold text-brand-ink transition hover:bg-brand"
         >
           <span className="hidden sm:inline">{USER.balance}</span>
           <span className="sm:hidden">{USER.balanceShort}</span>
-          <span className="flex h-5 w-5 items-center justify-center rounded-lg bg-white/90 text-brand">
+          <span className="flex h-5 w-5 items-center justify-center rounded-lg bg-white/90 text-brand-ink">
             <Plus className="h-3 w-3" />
           </span>
         </Link>
@@ -47,7 +47,7 @@ export function Header() {
           aria-label="Notifications"
         >
           <Bell className="h-4 w-4" />
-          <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-md bg-brand px-1 text-[10px] font-bold text-white">
+          <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-md bg-harbor px-1 text-[10px] font-bold text-brand">
             4
           </span>
         </button>

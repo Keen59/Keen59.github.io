@@ -29,7 +29,7 @@ export function BalancePage() {
         <h2 className="mb-3 text-lg font-semibold text-ink">
           Choose how you want to pay
         </h2>
-        <div className="mb-4 rounded-xl bg-brand px-4 py-3 text-sm font-medium text-white">
+        <div className="mb-4 rounded-xl bg-harbor px-4 py-3 text-sm font-medium text-brand">
           Card top-ups are applied instantly. Bank transfers may take 1–2
           business days.
         </div>
@@ -72,8 +72,8 @@ export function BalancePage() {
 
           <div className="card space-y-3 p-5">
             <h3 className="font-bold text-ink">Bank Transfer</h3>
-            <InfoRow label="Bank" value="ShipPier Bank" />
-            <InfoRow label="Beneficiary" value="ShipPier Logistics SA" />
+            <InfoRow label="Bank" value="ESCArgo Bank" />
+            <InfoRow label="Beneficiary" value="ESCArgo Logistics SA" />
             <InfoRow label="Tax ID" value="TKR880101XXX" />
             <InfoRow label="Account" value="012345678901234567" />
           </div>

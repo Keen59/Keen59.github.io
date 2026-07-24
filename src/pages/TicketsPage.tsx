@@ -67,7 +67,7 @@ export function TicketsPage() {
                 onClick={() => setFilter(f)}
                 className={`rounded-full px-4 py-1.5 text-sm font-semibold transition ${
                   filter === f
-                    ? 'bg-brand text-white'
+                    ? 'bg-harbor text-brand'
                     : 'bg-gray-100 text-ink-muted hover:bg-gray-200'
                 }`}
               >

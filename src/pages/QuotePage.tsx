@@ -9,7 +9,7 @@ export function QuotePage() {
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-ink">
-            ShipPier — Cargo Quote System
+            ESCArgo — Cargo Quote System
           </h1>
           <p className="mt-1 text-sm text-ink-muted">
             Enter an Amazon ASIN and destination zip code to get a shipping
@@ -46,7 +46,7 @@ export function QuotePage() {
           <h2 className="text-lg font-semibold text-ink">New quote</h2>
           <p className="mt-1 text-sm text-ink-muted">
             Product dimensions are pulled from Keepa API and rates are
-            calculated via ShipPier API.
+            calculated via ESCArgo API.
           </p>
         </div>
 
@@ -130,7 +130,7 @@ export function QuotePage() {
       </details>
 
       <p className="text-center text-xs text-ink-muted">
-        Infrastructure: Keepa API + ShipPier API · Prices shown in carrier
+        Infrastructure: Keepa API + ESCArgo API · Prices shown in carrier
         currency
       </p>
     </div>

@@ -1,7 +1,7 @@
 import type { ShipmentStatus, TicketStatus } from '../data/mock'
 
 const shipmentStyles: Record<ShipmentStatus, string> = {
-  documented: 'bg-brand-muted text-brand-dark',
+  documented: 'bg-brand-muted text-brand-ink',
   in_transit: 'bg-sky-100 text-sky-700',
   delivered: 'bg-emerald-100 text-emerald-700',
   exception: 'bg-rose-100 text-rose-700',

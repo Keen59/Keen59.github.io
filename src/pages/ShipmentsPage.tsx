@@ -76,7 +76,7 @@ export function ShipmentsPage() {
             <Plus className="h-4 w-4" />
             Create Label
           </button>
-          <button type="button" className="btn-primary bg-brand-dark">
+          <button type="button" className="btn-primary bg-harbor text-brand hover:bg-harbor-soft">
             <RefreshCw className="h-4 w-4" />
             Update Orders
           </button>
@@ -100,7 +100,7 @@ export function ShipmentsPage() {
               >
                 <span
                   className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${
-                    active ? 'bg-brand text-white' : 'bg-harbor text-brand'
+                    active ? 'bg-brand text-brand-ink' : 'bg-harbor text-brand'
                   }`}
                 >
                   <Icon className="h-5 w-5" />
@@ -113,8 +113,8 @@ export function ShipmentsPage() {
                     <span
                       className={`badge ${
                         active
-                          ? 'bg-brand text-white'
-                          : 'bg-brand-muted text-brand-dark'
+                          ? 'bg-harbor text-brand'
+                          : 'bg-brand-muted text-brand-ink'
                       }`}
                     >
                       {stageCounts[s.id]}
@@ -290,7 +290,7 @@ function ActionBtn({
   tone: 'brand' | 'danger' | 'muted'
 }) {
   const tones = {
-    brand: 'bg-brand text-white hover:bg-brand-dark',
+    brand: 'bg-harbor text-brand hover:bg-harbor-soft',
     danger: 'bg-rose-500 text-white hover:bg-rose-600',
     muted: 'bg-gray-200 text-ink hover:bg-gray-300',
   }

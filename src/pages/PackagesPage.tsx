@@ -50,7 +50,7 @@ export function PackagesPage() {
               onClick={() => setType(id)}
               className={`flex flex-col items-center gap-2 rounded-xl px-3 py-4 text-center text-xs font-semibold transition ${
                 type === id
-                  ? 'bg-brand text-white shadow-md shadow-brand/30'
+                  ? 'bg-brand text-brand-ink shadow-md shadow-brand/30'
                   : 'bg-brand-muted text-brand hover:bg-brand/20'
               }`}
             >

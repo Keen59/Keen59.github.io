@@ -9,6 +9,8 @@ export type ShipmentStatus =
 
 export type TicketStatus = 'waiting' | 'in_progress' | 'resolved' | 'closed'
 
+export type Platform = 'Amazon' | 'Etsy' | 'Shopify' | 'eBay' | 'WooCommerce'
+
 export interface KpiStat {
   id: string
   label: string
@@ -30,6 +32,40 @@ export interface DeliveryAvg {
   speed: 'Fast' | 'Normal' | 'Slow'
 }
 
+export interface OrderStageEvent {
+  id: string
+  stage: ShipmentStage
+  title: string
+  detail: string
+  at: string
+  location: string
+  done: boolean
+}
+
+export interface Order {
+  id: string
+  orderNo: string
+  boxId: string
+  customer: {
+    name: string
+    email: string
+    phone: string
+    address: string
+  }
+  platform: Platform
+  storeName: string
+  registeredAt: string
+  carrier: string
+  status: ShipmentStatus
+  progress: number
+  stage: ShipmentStage
+  origin: string
+  warehouse: string
+  tracking: string
+  timeline: OrderStageEvent[]
+}
+
+/** @deprecated use Order — kept for dashboard recent list mapping */
 export interface Shipment {
   id: string
   tracking: string
@@ -54,6 +90,34 @@ export interface Ticket {
   relative: string
   classification: string
   shipmentId: string
+}
+
+export interface Transaction {
+  id: string
+  date: string
+  type: 'top_up' | 'label' | 'refund' | 'fee'
+  description: string
+  amount: string
+  balanceAfter: string
+}
+
+export interface Employee {
+  id: string
+  name: string
+  role: string
+  email: string
+  status: 'active' | 'away' | 'offline'
+  ordersHandled: number
+}
+
+export interface LabelRow {
+  id: string
+  labelNo: string
+  orderNo: string
+  boxId: string
+  carrier: string
+  createdAt: string
+  status: 'ready' | 'printed' | 'void'
 }
 
 export const SHIPMENT_STAGES: {
@@ -110,140 +174,304 @@ export const CARRIER_USAGE: CarrierUsage[] = [
 ]
 
 export const DELIVERY_AVG: DeliveryAvg[] = [
-  { id: '1', carrier: 'ShipPier Express', days: 1.2, speed: 'Fast' },
+  { id: '1', carrier: 'ESCArgo Express', days: 1.2, speed: 'Fast' },
   { id: '2', carrier: 'DHL', days: 2.6, speed: 'Fast' },
   { id: '3', carrier: 'UPS', days: 3.1, speed: 'Normal' },
   { id: '4', carrier: 'FedEx', days: 4.0, speed: 'Slow' },
 ]
 
-export const RECENT_SHIPMENTS: Shipment[] = [
+function timeline(
+  orderNo: string,
+  current: ShipmentStage,
+): OrderStageEvent[] {
+  const steps: Omit<OrderStageEvent, 'done'>[] = [
+    {
+      id: `${orderNo}-1a`,
+      stage: 'first_transport',
+      title: 'Picked up from supplier',
+      detail: 'Package collected and first-mile scan completed',
+      at: '2026-07-12 09:14',
+      location: 'Guangzhou, CN',
+    },
+    {
+      id: `${orderNo}-1b`,
+      stage: 'first_transport',
+      title: 'In transit to hub',
+      detail: 'Air / ground transfer to destination warehouse',
+      at: '2026-07-13 16:40',
+      location: 'In transit',
+    },
+    {
+      id: `${orderNo}-2a`,
+      stage: 'warehouse',
+      title: 'Arrived at warehouse',
+      detail: 'Inbound dock received and box ID assigned',
+      at: '2026-07-14 11:05',
+      location: 'Regional Hub',
+    },
+    {
+      id: `${orderNo}-2b`,
+      stage: 'warehouse',
+      title: 'Sorted & labeled',
+      detail: 'QC check passed, outbound label printed',
+      at: '2026-07-14 18:22',
+      location: 'Regional Hub',
+    },
+    {
+      id: `${orderNo}-3a`,
+      stage: 'second_transport',
+      title: 'Out for delivery',
+      detail: 'Last-mile carrier departed warehouse',
+      at: '2026-07-15 08:50',
+      location: 'Last mile',
+    },
+    {
+      id: `${orderNo}-3b`,
+      stage: 'second_transport',
+      title: 'Delivered / final scan',
+      detail: 'Customer delivery confirmation',
+      at: '2026-07-16 14:10',
+      location: 'Destination',
+    },
+  ]
+
+  const order: ShipmentStage[] = [
+    'first_transport',
+    'warehouse',
+    'second_transport',
+  ]
+  const currentIdx = order.indexOf(current)
+
+  return steps.map((s) => {
+    const stageIdx = order.indexOf(s.stage)
+    return {
+      ...s,
+      done: stageIdx < currentIdx || (stageIdx === currentIdx && s.id.endsWith('a')),
+    }
+  })
+}
+
+export const ORDERS: Order[] = [
   {
-    id: '70482',
-    tracking: 'SPR7048219384',
+    id: 'ord-1',
+    orderNo: 'ESC-70482',
+    boxId: 'BOX-9A2F41',
+    customer: {
+      name: 'Leyla Demir',
+      email: 'leyla.demir@mail.com',
+      phone: '+90 532 441 2290',
+      address: 'Bağdat Cad. 148, Istanbul',
+    },
+    platform: 'Amazon',
+    storeName: 'Nordic Home TR',
     registeredAt: '2026-07-16 18:41',
-    recipient: 'Leyla Demir',
-    address: 'Bağdat Cad. 148, Istanbul',
-    ecommerce: 'Shopify',
     carrier: 'DHL',
     status: 'in_transit',
     progress: 55,
     stage: 'first_transport',
     origin: 'Guangzhou, CN',
     warehouse: 'Istanbul Hub',
+    tracking: 'ESC7048219384',
+    timeline: timeline('ESC-70482', 'first_transport'),
   },
   {
-    id: '70471',
-    tracking: 'SPR7047199201',
+    id: 'ord-2',
+    orderNo: 'ESC-70471',
+    boxId: 'BOX-3C81DE',
+    customer: {
+      name: 'Noah Keller',
+      email: 'noah.keller@mail.com',
+      phone: '+49 170 882 4411',
+      address: 'Friedrichstr. 90, Berlin',
+    },
+    platform: 'Etsy',
+    storeName: 'Berlin Craft Co',
     registeredAt: '2026-07-16 15:17',
-    recipient: 'Noah Keller',
-    address: 'Friedrichstr. 90, Berlin',
-    ecommerce: 'Amazon',
     carrier: 'UPS',
     status: 'documented',
     progress: 15,
     stage: 'first_transport',
     origin: 'Shenzhen, CN',
     warehouse: 'Berlin Hub',
+    tracking: 'ESC7047199201',
+    timeline: timeline('ESC-70471', 'first_transport'),
   },
   {
-    id: '70409',
-    tracking: 'SPR7040955338',
+    id: 'ord-3',
+    orderNo: 'ESC-70409',
+    boxId: 'BOX-77B0AA',
+    customer: {
+      name: 'Mateo Rojas',
+      email: 'mateo.rojas@mail.com',
+      phone: '+57 310 554 8821',
+      address: 'Calle 72 #10, Bogota',
+    },
+    platform: 'Shopify',
+    storeName: 'Andes Market',
     registeredAt: '2026-07-15 08:12',
-    recipient: 'Mateo Rojas',
-    address: 'Calle 72 #10, Bogota',
-    ecommerce: 'Shopify',
     carrier: 'Estafeta',
     status: 'pending',
     progress: 8,
     stage: 'first_transport',
     origin: 'Yiwu, CN',
     warehouse: 'Miami Hub',
+    tracking: 'ESC7040955338',
+    timeline: timeline('ESC-70409', 'first_transport'),
   },
   {
-    id: '70438',
-    tracking: 'SPR7043877442',
+    id: 'ord-4',
+    orderNo: 'ESC-70438',
+    boxId: 'BOX-11E9C2',
+    customer: {
+      name: 'Hiro Tanaka',
+      email: 'hiro.tanaka@mail.com',
+      phone: '+81 90 4412 7788',
+      address: 'Shibuya 2-1, Tokyo',
+    },
+    platform: 'Amazon',
+    storeName: 'Tokyo Gadgets',
     registeredAt: '2026-07-15 21:56',
-    recipient: 'Hiro Tanaka',
-    address: 'Shibuya 2-1, Tokyo',
-    ecommerce: 'Shopify',
     carrier: 'DHL',
     status: 'exception',
     progress: 35,
     stage: 'warehouse',
     origin: 'Ningbo, CN',
     warehouse: 'Tokyo Hub',
+    tracking: 'ESC7043877442',
+    timeline: timeline('ESC-70438', 'warehouse'),
   },
   {
-    id: '70374',
-    tracking: 'SPR7037488115',
+    id: 'ord-5',
+    orderNo: 'ESC-70374',
+    boxId: 'BOX-55D401',
+    customer: {
+      name: 'Arjun Mehta',
+      email: 'arjun.mehta@mail.com',
+      phone: '+91 98200 44122',
+      address: 'Bandra West, Mumbai',
+    },
+    platform: 'eBay',
+    storeName: 'Mumbai Imports',
     registeredAt: '2026-07-14 10:09',
-    recipient: 'Arjun Mehta',
-    address: 'Bandra West, Mumbai',
-    ecommerce: 'Shopify',
     carrier: 'DHL',
     status: 'documented',
     progress: 22,
     stage: 'warehouse',
     origin: 'Guangzhou, CN',
     warehouse: 'Dubai Hub',
+    tracking: 'ESC7037488115',
+    timeline: timeline('ESC-70374', 'warehouse'),
   },
   {
-    id: '70490',
-    tracking: 'SPR7049088122',
+    id: 'ord-6',
+    orderNo: 'ESC-70490',
+    boxId: 'BOX-8F2201',
+    customer: {
+      name: 'Sofia Alvarez',
+      email: 'sofia.alvarez@mail.com',
+      phone: '+34 612 884 330',
+      address: 'Gran Via 22, Madrid',
+    },
+    platform: 'Etsy',
+    storeName: 'Iberia Studio',
     registeredAt: '2026-07-16 09:30',
-    recipient: 'Sofia Alvarez',
-    address: 'Gran Via 22, Madrid',
-    ecommerce: 'WooCommerce',
     carrier: 'UPS',
     status: 'pending',
     progress: 40,
     stage: 'warehouse',
     origin: 'Shanghai, CN',
     warehouse: 'Madrid Hub',
+    tracking: 'ESC7049088122',
+    timeline: timeline('ESC-70490', 'warehouse'),
   },
   {
-    id: '70455',
-    tracking: 'SPR7045548120',
+    id: 'ord-7',
+    orderNo: 'ESC-70455',
+    boxId: 'BOX-2A90FF',
+    customer: {
+      name: 'Amina Farouk',
+      email: 'amina.farouk@mail.com',
+      phone: '+20 100 554 2211',
+      address: 'Zamalek St 12, Cairo',
+    },
+    platform: 'WooCommerce',
+    storeName: 'Nile Boutique',
     registeredAt: '2026-07-16 11:03',
-    recipient: 'Amina Farouk',
-    address: 'Zamalek St 12, Cairo',
-    ecommerce: 'WooCommerce',
     carrier: 'FedEx',
     status: 'delivered',
     progress: 100,
     stage: 'second_transport',
     origin: 'Guangzhou, CN',
     warehouse: 'Cairo Hub',
+    tracking: 'ESC7045548120',
+    timeline: timeline('ESC-70455', 'second_transport').map((e) => ({
+      ...e,
+      done: true,
+    })),
   },
   {
-    id: '70422',
-    tracking: 'SPR7042266011',
+    id: 'ord-8',
+    orderNo: 'ESC-70422',
+    boxId: 'BOX-C44120',
+    customer: {
+      name: 'Elena Popov',
+      email: 'elena.popov@mail.com',
+      phone: '+7 921 441 0099',
+      address: 'Nevsky 45, St. Petersburg',
+    },
+    platform: 'Shopify',
+    storeName: 'Baltic Goods',
     registeredAt: '2026-07-15 14:28',
-    recipient: 'Elena Popov',
-    address: 'Nevsky 45, St. Petersburg',
-    ecommerce: 'Etsy',
     carrier: 'UPS',
     status: 'in_transit',
     progress: 70,
     stage: 'second_transport',
     origin: 'Shenzhen, CN',
     warehouse: 'Istanbul Hub',
+    tracking: 'ESC7042266011',
+    timeline: timeline('ESC-70422', 'second_transport'),
   },
   {
-    id: '70391',
-    tracking: 'SPR7039144207',
+    id: 'ord-9',
+    orderNo: 'ESC-70391',
+    boxId: 'BOX-0912AB',
+    customer: {
+      name: 'Chloe Martin',
+      email: 'chloe.martin@mail.com',
+      phone: '+33 6 12 88 44 01',
+      address: 'Rue Lafayette 8, Lyon',
+    },
+    platform: 'Amazon',
+    storeName: 'Lyon Maison',
     registeredAt: '2026-07-14 19:45',
-    recipient: 'Chloe Martin',
-    address: 'Rue Lafayette 8, Lyon',
-    ecommerce: 'Amazon',
     carrier: 'FedEx',
     status: 'delivered',
     progress: 100,
     stage: 'second_transport',
     origin: 'Yiwu, CN',
     warehouse: 'Paris Hub',
+    tracking: 'ESC7039144207',
+    timeline: timeline('ESC-70391', 'second_transport').map((e) => ({
+      ...e,
+      done: true,
+    })),
   },
 ]
+
+export const RECENT_SHIPMENTS: Shipment[] = ORDERS.map((o) => ({
+  id: o.orderNo.replace('ESC-', ''),
+  tracking: o.tracking,
+  registeredAt: o.registeredAt,
+  recipient: o.customer.name,
+  address: o.customer.address,
+  ecommerce: o.platform,
+  carrier: o.carrier,
+  status: o.status,
+  progress: o.progress,
+  stage: o.stage,
+  origin: o.origin,
+  warehouse: o.warehouse,
+}))
 
 export const TICKETS: Ticket[] = [
   {
@@ -302,6 +530,135 @@ export const BALANCE_STATS = [
   { label: 'Average', value: '$ 7,890.00' },
   { label: 'Last Recharge', value: '$ 3,500.00' },
   { label: 'Applied Today', value: '$ 850.00' },
+]
+
+export const TRANSACTIONS: Transaction[] = [
+  {
+    id: 'tx-1',
+    date: '2026-07-16 17:20',
+    type: 'label',
+    description: 'Outbound label ESC-70482',
+    amount: '-$12.40',
+    balanceAfter: '$64,812.47',
+  },
+  {
+    id: 'tx-2',
+    date: '2026-07-16 09:05',
+    type: 'top_up',
+    description: 'Card top-up',
+    amount: '+$3,500.00',
+    balanceAfter: '$64,824.87',
+  },
+  {
+    id: 'tx-3',
+    date: '2026-07-15 21:10',
+    type: 'fee',
+    description: 'Warehouse handling fee',
+    amount: '-$4.20',
+    balanceAfter: '$61,324.87',
+  },
+  {
+    id: 'tx-4',
+    date: '2026-07-15 14:02',
+    type: 'refund',
+    description: 'Voided return label refund',
+    amount: '+$8.90',
+    balanceAfter: '$61,329.07',
+  },
+  {
+    id: 'tx-5',
+    date: '2026-07-14 11:44',
+    type: 'label',
+    description: 'Return label ESC-R-8891',
+    amount: '-$9.10',
+    balanceAfter: '$61,320.17',
+  },
+]
+
+export const EMPLOYEES: Employee[] = [
+  {
+    id: 'e1',
+    name: 'Elif Yılmaz',
+    role: 'Warehouse Lead',
+    email: 'elif@escargo.com',
+    status: 'active',
+    ordersHandled: 842,
+  },
+  {
+    id: 'e2',
+    name: 'Marcus Lee',
+    role: 'Support Agent',
+    email: 'marcus@escargo.com',
+    status: 'active',
+    ordersHandled: 511,
+  },
+  {
+    id: 'e3',
+    name: 'Nora Schmidt',
+    role: 'Label Operator',
+    email: 'nora@escargo.com',
+    status: 'away',
+    ordersHandled: 1260,
+  },
+  {
+    id: 'e4',
+    name: 'Omar Haddad',
+    role: 'Returns Specialist',
+    email: 'omar@escargo.com',
+    status: 'offline',
+    ordersHandled: 298,
+  },
+]
+
+export const LABELS: LabelRow[] = [
+  {
+    id: 'l1',
+    labelNo: 'LBL-22091',
+    orderNo: 'ESC-70482',
+    boxId: 'BOX-9A2F41',
+    carrier: 'DHL',
+    createdAt: '2026-07-16 18:50',
+    status: 'printed',
+  },
+  {
+    id: 'l2',
+    labelNo: 'LBL-22088',
+    orderNo: 'ESC-70471',
+    boxId: 'BOX-3C81DE',
+    carrier: 'UPS',
+    createdAt: '2026-07-16 15:30',
+    status: 'ready',
+  },
+  {
+    id: 'l3',
+    labelNo: 'LBL-22070',
+    orderNo: 'ESC-70438',
+    boxId: 'BOX-11E9C2',
+    carrier: 'DHL',
+    createdAt: '2026-07-15 22:10',
+    status: 'void',
+  },
+]
+
+export const RETURN_LABELS: LabelRow[] = [
+  {
+    id: 'r1',
+    labelNo: 'RTL-8891',
+    orderNo: 'ESC-70391',
+    boxId: 'BOX-0912AB',
+    carrier: 'FedEx',
+    createdAt: '2026-07-16 10:12',
+    status: 'printed',
+  },
+  {
+    id: 'r2',
+    labelNo: 'RTL-8874',
+    orderNo: 'ESC-70438',
+    boxId: 'BOX-11E9C2',
+    carrier: 'DHL',
+    createdAt: '2026-07-15 19:40',
+    status: 'ready',
+  },
 ]
 
 export const SETTINGS_SHORTCUTS = [
