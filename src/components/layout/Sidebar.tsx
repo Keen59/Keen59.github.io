@@ -21,7 +21,7 @@ import { NavLink, Link } from 'react-router-dom'
 const mainNav = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard', end: true },
   { to: '/orders', icon: ClipboardList, label: 'Orders Overview' },
-  { to: '/shipments', icon: ListOrdered, label: 'Shipments' },
+  { to: '/shipments', icon: ListOrdered, label: 'Shipping List' },
   { to: '/labels', icon: Tag, label: 'Labels' },
   { to: '/return-labels', icon: RotateCcw, label: 'Return Labels' },
   { to: '/transactions', icon: Wallet, label: 'Transactions' },

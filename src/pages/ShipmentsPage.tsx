@@ -1,11 +1,14 @@
-import { useMemo, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import {
   ArrowRight,
+  CheckCircle2,
+  Circle,
   Copy,
   Download,
   Eye,
   FileSpreadsheet,
   FileText,
+  MapPin,
   Package,
   Plus,
   RefreshCw,
@@ -13,10 +16,12 @@ import {
   Trash2,
   Truck,
   Warehouse,
+  X,
 } from 'lucide-react'
 import {
-  RECENT_SHIPMENTS,
+  ORDERS,
   SHIPMENT_STAGES,
+  type Order,
   type ShipmentStage,
 } from '../data/mock'
 import { StatusBadge } from '../components/StatusBadge'
@@ -31,11 +36,12 @@ export function ShipmentsPage() {
   const [stage, setStage] = useState<ShipmentStage>('first_transport')
   const [query, setQuery] = useState('')
   const [pageSize, setPageSize] = useState(25)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
 
   const stageCounts = useMemo(() => {
     return SHIPMENT_STAGES.reduce(
       (acc, s) => {
-        acc[s.id] = RECENT_SHIPMENTS.filter((row) => row.stage === s.id).length
+        acc[s.id] = ORDERS.filter((row) => row.stage === s.id).length
         return acc
       },
       {} as Record<ShipmentStage, number>,
@@ -44,31 +50,39 @@ export function ShipmentsPage() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
-    return RECENT_SHIPMENTS.filter((s) => {
-      if (s.stage !== stage) return false
+    return ORDERS.filter((o) => {
+      if (o.stage !== stage) return false
       if (!q) return true
       return (
-        s.recipient.toLowerCase().includes(q) ||
-        s.address.toLowerCase().includes(q) ||
-        s.tracking.toLowerCase().includes(q) ||
-        s.id.includes(q) ||
-        (s.origin?.toLowerCase().includes(q) ?? false) ||
-        (s.warehouse?.toLowerCase().includes(q) ?? false)
+        o.customer.name.toLowerCase().includes(q) ||
+        o.customer.address.toLowerCase().includes(q) ||
+        o.tracking.toLowerCase().includes(q) ||
+        o.orderNo.toLowerCase().includes(q) ||
+        o.boxId.toLowerCase().includes(q) ||
+        o.origin.toLowerCase().includes(q) ||
+        o.warehouse.toLowerCase().includes(q) ||
+        o.platform.toLowerCase().includes(q)
       )
-    })
-  }, [query, stage])
+    }).slice(0, pageSize)
+  }, [query, stage, pageSize])
 
   const activeMeta = SHIPMENT_STAGES.find((s) => s.id === stage)!
+  const selected = ORDERS.find((o) => o.id === selectedId) ?? null
+
+  function toggleOrder(id: string) {
+    setSelectedId((prev) => (prev === id ? null : id))
+  }
 
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold uppercase tracking-wide text-ink">
-            Shipment Details
+            Shipping List
           </h1>
           <p className="mt-1 text-sm text-ink-muted">
-            Pipeline: 1st Transport → Warehouse → 2nd Transport
+            Click an order number to open customer info and the full update
+            trail from origin to customer
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -76,7 +90,10 @@ export function ShipmentsPage() {
             <Plus className="h-4 w-4" />
             Create Label
           </button>
-          <button type="button" className="btn-primary bg-harbor text-brand hover:bg-harbor-soft">
+          <button
+            type="button"
+            className="btn-primary bg-harbor text-brand hover:bg-harbor-soft"
+          >
             <RefreshCw className="h-4 w-4" />
             Update Orders
           </button>
@@ -91,7 +108,10 @@ export function ShipmentsPage() {
             <div key={s.id} className="contents">
               <button
                 type="button"
-                onClick={() => setStage(s.id)}
+                onClick={() => {
+                  setStage(s.id)
+                  setSelectedId(null)
+                }}
                 className={`card flex w-full items-start gap-3 p-4 text-left transition ${
                   active
                     ? 'border-brand ring-2 ring-brand/20 shadow-lift'
@@ -171,23 +191,24 @@ export function ShipmentsPage() {
           </label>
           <input
             className="input max-w-sm"
-            placeholder="Search by name, tracking, origin or warehouse..."
+            placeholder="Search order no, box ID, customer, platform..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
         </div>
 
         <div className="overflow-x-auto rounded-lg border border-gray-100">
-          <table className="w-full min-w-[1100px] text-left text-sm">
+          <table className="w-full min-w-[1180px] text-left text-sm">
             <thead>
-              <tr className="bg-harbor text-xs uppercase tracking-wide text-white">
-                <th className="px-3 py-3 font-semibold">Shipment ID</th>
-                <th className="px-3 py-3 font-semibold">Tracking #</th>
-                <th className="px-3 py-3 font-semibold">Registered</th>
+              <tr className="bg-harbor text-xs uppercase tracking-wide text-brand">
+                <th className="px-3 py-3 font-semibold">Order No</th>
+                <th className="px-3 py-3 font-semibold">Box ID</th>
+                <th className="px-3 py-3 font-semibold">Customer</th>
+                <th className="px-3 py-3 font-semibold">Platform</th>
                 <th className="px-3 py-3 font-semibold">Origin</th>
                 <th className="px-3 py-3 font-semibold">Warehouse</th>
-                <th className="px-3 py-3 font-semibold">Recipient</th>
                 <th className="px-3 py-3 font-semibold">Carrier</th>
+                <th className="px-3 py-3 font-semibold">Last Update</th>
                 <th className="px-3 py-3 font-semibold">Status</th>
                 <th className="px-3 py-3 font-semibold">Actions</th>
               </tr>
@@ -196,62 +217,102 @@ export function ShipmentsPage() {
               {filtered.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={9}
+                    colSpan={10}
                     className="px-3 py-10 text-center text-ink-muted"
                   >
                     No shipments in this stage
                   </td>
                 </tr>
               ) : (
-                filtered.map((s, i) => (
-                  <tr
-                    key={s.id}
-                    className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
-                  >
-                    <td className="px-3 py-3 font-semibold text-brand">
-                      {s.id}
-                    </td>
-                    <td className="px-3 py-3 font-medium text-ink">
-                      {s.tracking}
-                    </td>
-                    <td className="px-3 py-3 text-ink-muted">
-                      {s.registeredAt}
-                    </td>
-                    <td className="px-3 py-3 text-ink">{s.origin ?? '—'}</td>
-                    <td className="px-3 py-3 text-ink">{s.warehouse ?? '—'}</td>
-                    <td className="px-3 py-3">
-                      <p className="font-medium text-ink">{s.recipient}</p>
-                      <p className="max-w-[180px] truncate text-xs text-ink-muted">
-                        {s.address}
-                      </p>
-                    </td>
-                    <td className="px-3 py-3">
-                      <span className="font-semibold lowercase text-rose-600">
-                        {s.carrier}
-                      </span>
-                    </td>
-                    <td className="px-3 py-3">
-                      <div className="space-y-1.5">
-                        <StatusBadge status={s.status} />
-                        <div className="h-1.5 w-24 overflow-hidden rounded-full bg-gray-200">
-                          <div
-                            className="h-full rounded-full bg-brand"
-                            style={{ width: `${s.progress}%` }}
-                          />
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-3 py-3">
-                      <div className="flex items-center gap-1">
-                        <ActionBtn icon={Download} tone="brand" />
-                        <ActionBtn icon={Trash2} tone="danger" />
-                        <ActionBtn icon={Eye} tone="brand" />
-                        <ActionBtn icon={RefreshCw} tone="brand" />
-                        <ActionBtn icon={Share2} tone="muted" />
-                      </div>
-                    </td>
-                  </tr>
-                ))
+                filtered.map((o, i) => {
+                  const lastUpdate = [...o.timeline]
+                    .reverse()
+                    .find((e) => e.done)
+                  const open = selectedId === o.id
+                  return (
+                    <Fragment key={o.id}>
+                      <tr
+                        className={`${i % 2 === 0 ? 'bg-white' : 'bg-surface'} ${
+                          open ? 'bg-brand-muted/40' : ''
+                        }`}
+                      >
+                        <td className="px-3 py-3">
+                          <button
+                            type="button"
+                            onClick={() => toggleOrder(o.id)}
+                            className="font-bold text-brand-ink underline decoration-brand/60 underline-offset-2 transition hover:text-harbor"
+                          >
+                            {o.orderNo}
+                          </button>
+                        </td>
+                        <td className="px-3 py-3 font-medium text-ink">
+                          {o.boxId}
+                        </td>
+                        <td className="px-3 py-3">
+                          <p className="font-medium text-ink">
+                            {o.customer.name}
+                          </p>
+                          <p className="max-w-[180px] truncate text-xs text-ink-muted">
+                            {o.customer.address}
+                          </p>
+                        </td>
+                        <td className="px-3 py-3">
+                          <p className="font-semibold text-ink">{o.platform}</p>
+                          <p className="text-xs text-ink-muted">{o.storeName}</p>
+                        </td>
+                        <td className="px-3 py-3 text-ink">{o.origin}</td>
+                        <td className="px-3 py-3 text-ink">{o.warehouse}</td>
+                        <td className="px-3 py-3">
+                          <span className="font-semibold lowercase text-rose-600">
+                            {o.carrier}
+                          </span>
+                        </td>
+                        <td className="px-3 py-3">
+                          <p className="font-medium text-ink">
+                            {lastUpdate?.title ?? 'Awaiting first scan'}
+                          </p>
+                          <p className="text-xs text-ink-muted">
+                            {lastUpdate?.at ?? o.registeredAt}
+                          </p>
+                        </td>
+                        <td className="px-3 py-3">
+                          <div className="space-y-1.5">
+                            <StatusBadge status={o.status} />
+                            <div className="h-1.5 w-24 overflow-hidden rounded-full bg-gray-200">
+                              <div
+                                className="h-full rounded-full bg-brand"
+                                style={{ width: `${o.progress}%` }}
+                              />
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-3 py-3">
+                          <div className="flex items-center gap-1">
+                            <ActionBtn
+                              icon={Eye}
+                              tone="brand"
+                              onClick={() => toggleOrder(o.id)}
+                            />
+                            <ActionBtn icon={Download} tone="brand" />
+                            <ActionBtn icon={Trash2} tone="danger" />
+                            <ActionBtn icon={RefreshCw} tone="brand" />
+                            <ActionBtn icon={Share2} tone="muted" />
+                          </div>
+                        </td>
+                      </tr>
+                      {open && (
+                        <tr className="bg-brand-muted/25">
+                          <td colSpan={10} className="px-3 py-4">
+                            <OrderDetailPanel
+                              order={o}
+                              onClose={() => setSelectedId(null)}
+                            />
+                          </td>
+                        </tr>
+                      )}
+                    </Fragment>
+                  )
+                })
               )}
             </tbody>
           </table>
@@ -278,6 +339,114 @@ export function ShipmentsPage() {
           </div>
         </div>
       </div>
+
+      {selected && (
+        <p className="text-xs text-ink-muted">
+          Open detail: {selected.orderNo} · click order number again to close
+        </p>
+      )}
+    </div>
+  )
+}
+
+function OrderDetailPanel({
+  order,
+  onClose,
+}: {
+  order: Order
+  onClose: () => void
+}) {
+  return (
+    <div className="rounded-2xl border border-brand/40 bg-white p-4 shadow-card">
+      <div className="mb-4 flex items-start justify-between gap-3">
+        <div>
+          <h3 className="text-base font-bold text-ink">
+            {order.orderNo} · journey updates
+          </h3>
+          <p className="text-sm text-ink-muted">
+            From first departure ({order.origin}) to customer delivery
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={onClose}
+          className="rounded-lg p-1.5 text-ink-muted hover:bg-surface hover:text-ink"
+          aria-label="Close"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+
+      <div className="mb-5 grid gap-3 rounded-xl bg-surface p-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Detail label="Customer" value={order.customer.name} />
+        <Detail label="Email" value={order.customer.email} />
+        <Detail label="Phone" value={order.customer.phone} />
+        <Detail label="Address" value={order.customer.address} />
+        <Detail label="Box ID" value={order.boxId} />
+        <Detail label="Platform" value={`${order.platform} · ${order.storeName}`} />
+        <Detail label="Tracking" value={order.tracking} />
+        <Detail
+          label="Route"
+          value={`${order.origin} → ${order.warehouse} → Customer`}
+        />
+      </div>
+
+      <h4 className="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-ink">
+        All updates
+      </h4>
+      <ol className="relative ml-3 space-y-0 border-l-2 border-brand/50">
+        {order.timeline.map((event) => {
+          const Icon = stageIcons[event.stage]
+          return (
+            <li key={event.id} className="relative pb-5 pl-6 last:pb-0">
+              <span
+                className={`absolute -left-[9px] top-1 flex h-4 w-4 items-center justify-center rounded-full ${
+                  event.done
+                    ? 'bg-harbor text-brand'
+                    : 'bg-white text-ink-muted ring-2 ring-brand'
+                }`}
+              >
+                {event.done ? (
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                ) : (
+                  <Circle className="h-3 w-3" />
+                )}
+              </span>
+              <div className="rounded-xl border border-harbor/8 bg-surface/60 p-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="badge bg-brand-muted text-brand-ink">
+                    <Icon className="h-3 w-3" />
+                    {SHIPMENT_STAGES.find((s) => s.id === event.stage)?.label}
+                  </span>
+                  <span className="text-xs text-ink-muted">{event.at}</span>
+                  {!event.done && (
+                    <span className="badge bg-amber-100 text-amber-800">
+                      Upcoming
+                    </span>
+                  )}
+                </div>
+                <p className="mt-2 font-semibold text-ink">{event.title}</p>
+                <p className="text-sm text-ink-muted">{event.detail}</p>
+                <p className="mt-1 flex items-center gap-1 text-xs text-ink-muted">
+                  <MapPin className="h-3 w-3" />
+                  {event.location}
+                </p>
+              </div>
+            </li>
+          )
+        })}
+      </ol>
+    </div>
+  )
+}
+
+function Detail({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-muted">
+        {label}
+      </p>
+      <p className="truncate text-sm font-semibold text-ink">{value}</p>
     </div>
   )
 }
@@ -285,9 +454,11 @@ export function ShipmentsPage() {
 function ActionBtn({
   icon: Icon,
   tone,
+  onClick,
 }: {
   icon: typeof Download
   tone: 'brand' | 'danger' | 'muted'
+  onClick?: () => void
 }) {
   const tones = {
     brand: 'bg-harbor text-brand hover:bg-harbor-soft',
@@ -297,6 +468,7 @@ function ActionBtn({
   return (
     <button
       type="button"
+      onClick={onClick}
       className={`flex h-7 w-7 items-center justify-center rounded-md transition ${tones[tone]}`}
     >
       <Icon className="h-3.5 w-3.5" />
