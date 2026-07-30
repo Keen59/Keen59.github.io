@@ -81,6 +81,18 @@ export interface Shipment {
   warehouse?: string
 }
 
+export interface TicketMessage {
+  id: string
+  from: 'support' | 'customer'
+  author: string
+  at: string
+  text: string
+  attachment?: {
+    name: string
+    type: 'image' | 'file'
+  }
+}
+
 export interface Ticket {
   id: string
   status: TicketStatus
@@ -90,6 +102,15 @@ export interface Ticket {
   relative: string
   classification: string
   shipmentId: string
+  tracking: string
+  carrier: string
+  customer: {
+    name: string
+    company: string
+    email: string
+    phone: string
+  }
+  messages: TicketMessage[]
 }
 
 export interface Transaction {
@@ -483,6 +504,38 @@ export const TICKETS: Ticket[] = [
     relative: '2h ago',
     classification: 'Label stopped / No movement',
     shipmentId: '70482',
+    tracking: 'ESC7048219384MX882019',
+    carrier: 'DHL',
+    customer: {
+      name: 'Leyla Demir',
+      company: 'Nordic Home TR',
+      email: 'leyla.demir@mail.com',
+      phone: '+90 532 441 2290',
+    },
+    messages: [
+      {
+        id: 'm1',
+        from: 'support',
+        author: 'ESCArgo Support',
+        at: '16 Jul 2026 11:20 a.m.',
+        text: 'Hello, we received your ticket about no movement on this label. We are checking with the carrier.',
+      },
+      {
+        id: 'm2',
+        from: 'customer',
+        author: 'Leyla Demir',
+        at: '16 Jul 2026 2:05 p.m.',
+        text: 'Thanks. Can you also confirm if the package left the first hub?',
+      },
+      {
+        id: 'm3',
+        from: 'support',
+        author: 'ESCArgo Support',
+        at: '16 Jul 2026 4:40 p.m.',
+        text: 'Here is the latest scan screenshot from the origin hub.',
+        attachment: { name: 'hub-scan.png', type: 'image' },
+      },
+    ],
   },
   {
     id: '6398',
@@ -493,6 +546,38 @@ export const TICKETS: Ticket[] = [
     relative: '11h ago',
     classification: 'Return to origin',
     shipmentId: '70438',
+    tracking: 'ESC7043877442JP1102',
+    carrier: 'DHL',
+    customer: {
+      name: 'Hiro Tanaka',
+      company: 'Tokyo Gadgets',
+      email: 'hiro.tanaka@mail.com',
+      phone: '+81 90 4412 7788',
+    },
+    messages: [
+      {
+        id: 'm1',
+        from: 'support',
+        author: 'ESCArgo Support',
+        at: '15 Jul 2026 9:10 a.m.',
+        text: 'Return to origin was confirmed. A refund has been issued to your balance.',
+      },
+      {
+        id: 'm2',
+        from: 'support',
+        author: 'ESCArgo Support',
+        at: '15 Jul 2026 9:12 a.m.',
+        text: 'Screenshot of the refund',
+        attachment: { name: 'refund-proof.jpg', type: 'image' },
+      },
+      {
+        id: 'm3',
+        from: 'customer',
+        author: 'Hiro Tanaka',
+        at: '15 Jul 2026 10:01 a.m.',
+        text: 'Perfect, thank you. Closing this on my side.',
+      },
+    ],
   },
   {
     id: '6375',
@@ -503,6 +588,30 @@ export const TICKETS: Ticket[] = [
     relative: '1d ago',
     classification: 'Delivery not recognized',
     shipmentId: '70409',
+    tracking: 'ESC7040955338CO441',
+    carrier: 'Estafeta',
+    customer: {
+      name: 'Mateo Rojas',
+      company: 'Andes Market',
+      email: 'mateo.rojas@mail.com',
+      phone: '+57 310 554 8821',
+    },
+    messages: [
+      {
+        id: 'm1',
+        from: 'customer',
+        author: 'Mateo Rojas',
+        at: '15 Jul 2026 4:50 p.m.',
+        text: 'The customer says they never received the package even though it shows delivered.',
+      },
+      {
+        id: 'm2',
+        from: 'support',
+        author: 'ESCArgo Support',
+        at: '15 Jul 2026 6:15 p.m.',
+        text: 'We opened an investigation with the carrier. Please share a photo of the delivery door if available.',
+      },
+    ],
   },
   {
     id: '6310',
@@ -513,6 +622,31 @@ export const TICKETS: Ticket[] = [
     relative: '3d ago',
     classification: 'Address correction',
     shipmentId: '70374',
+    tracking: 'ESC7037488115AE991',
+    carrier: 'DHL',
+    customer: {
+      name: 'Arjun Mehta',
+      company: 'Mumbai Imports',
+      email: 'arjun.mehta@mail.com',
+      phone: '+91 98200 44122',
+    },
+    messages: [
+      {
+        id: 'm1',
+        from: 'customer',
+        author: 'Arjun Mehta',
+        at: '13 Jul 2026 10:02 a.m.',
+        text: 'Please update the delivery address before last mile.',
+        attachment: { name: 'new-address.pdf', type: 'file' },
+      },
+      {
+        id: 'm2',
+        from: 'support',
+        author: 'ESCArgo Support',
+        at: '13 Jul 2026 11:40 a.m.',
+        text: 'Address updated successfully. Ticket closed.',
+      },
+    ],
   },
 ]
 
