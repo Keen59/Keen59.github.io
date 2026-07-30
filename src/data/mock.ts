@@ -669,6 +669,43 @@ export const TICKETS: Ticket[] = [
   },
 ]
 
+export interface CompensationTransfer {
+  id: string
+  ticketId: string
+  customerName: string
+  amount: string
+  method: 'wallet_credit' | 'bank_transfer'
+  reason: string
+  status: 'pending' | 'sent' | 'failed'
+  date: string
+  destination: string
+}
+
+export const COMPENSATIONS: CompensationTransfer[] = [
+  {
+    id: 'cmp-1',
+    ticketId: '6398',
+    customerName: 'Hiro Tanaka',
+    amount: '$48.90',
+    method: 'wallet_credit',
+    reason: 'Return to origin · freight credit',
+    status: 'sent',
+    date: '2026-07-15 09:15',
+    destination: 'Customer wallet · Tokyo Gadgets',
+  },
+  {
+    id: 'cmp-2',
+    ticketId: '6375',
+    customerName: 'Mateo Rojas',
+    amount: '$65.00',
+    method: 'bank_transfer',
+    reason: 'Delivery not recognized · goodwill',
+    status: 'pending',
+    date: '2026-07-16 08:40',
+    destination: 'IBAN · CO12 **** 8821',
+  },
+]
+
 export const TICKET_STATS = {
   total: 164,
   tracking: 23,
