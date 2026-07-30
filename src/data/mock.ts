@@ -113,10 +113,29 @@ export interface Ticket {
   messages: TicketMessage[]
 }
 
+export type WalletAccountId =
+  | 'labels'
+  | 'cargo'
+  | 'warehouse'
+  | 'returns'
+  | 'general'
+
+export interface WalletAccount {
+  id: WalletAccountId
+  name: string
+  description: string
+  balance: string
+  spentMonth: string
+  toppedUpMonth: string
+  lastCharge: string
+  currency: string
+}
+
 export interface Transaction {
   id: string
   date: string
-  type: 'top_up' | 'label' | 'refund' | 'fee'
+  wallet: WalletAccountId
+  type: 'top_up' | 'charge' | 'refund' | 'transfer'
   description: string
   amount: string
   balanceAfter: string
@@ -657,55 +676,176 @@ export const TICKET_STATS = {
   average: 7,
 }
 
+export const WALLET_ACCOUNTS: WalletAccount[] = [
+  {
+    id: 'labels',
+    name: 'Label Fees',
+    description: 'Outbound & print label charges only',
+    balance: '$ 18,420.50',
+    spentMonth: '$ 4,812.30',
+    toppedUpMonth: '$ 6,000.00',
+    lastCharge: '-$12.40 · ESC-70482',
+    currency: 'USD',
+  },
+  {
+    id: 'cargo',
+    name: 'Cargo Fees',
+    description: 'Carrier freight & shipping costs',
+    balance: '$ 29,860.15',
+    spentMonth: '$ 11,240.80',
+    toppedUpMonth: '$ 15,000.00',
+    lastCharge: '-$86.20 · DHL air ESC-70422',
+    currency: 'USD',
+  },
+  {
+    id: 'warehouse',
+    name: 'Warehouse Fees',
+    description: 'Receiving, sorting & handling',
+    balance: '$ 7,140.00',
+    spentMonth: '$ 1,980.40',
+    toppedUpMonth: '$ 2,500.00',
+    lastCharge: '-$4.20 · Hub handling',
+    currency: 'USD',
+  },
+  {
+    id: 'returns',
+    name: 'Return Labels',
+    description: 'Return label & reverse logistics',
+    balance: '$ 3,215.82',
+    spentMonth: '$ 640.10',
+    toppedUpMonth: '$ 1,000.00',
+    lastCharge: '-$9.10 · RTL-8891',
+    currency: 'USD',
+  },
+  {
+    id: 'general',
+    name: 'General Wallet',
+    description: 'Unallocated funds / transfers',
+    balance: '$ 6,176.00',
+    spentMonth: '$ 0.00',
+    toppedUpMonth: '$ 3,500.00',
+    lastCharge: '+$3,500.00 · Card top-up',
+    currency: 'USD',
+  },
+]
+
 export const BALANCE_STATS = [
-  { label: 'Available Balance', value: '$ 64,812.47' },
-  { label: 'Total Recharged', value: '$ 291,540.00' },
-  { label: 'This Month', value: '$ 21,680.00' },
-  { label: 'Average', value: '$ 7,890.00' },
-  { label: 'Last Recharge', value: '$ 3,500.00' },
-  { label: 'Applied Today', value: '$ 850.00' },
+  { label: 'Total Across Wallets', value: '$ 64,812.47' },
+  { label: 'Label Fees Balance', value: '$ 18,420.50' },
+  { label: 'Cargo Fees Balance', value: '$ 29,860.15' },
+  { label: 'Warehouse Balance', value: '$ 7,140.00' },
+  { label: 'Returns Balance', value: '$ 3,215.82' },
+  { label: 'General Wallet', value: '$ 6,176.00' },
 ]
 
 export const TRANSACTIONS: Transaction[] = [
   {
     id: 'tx-1',
     date: '2026-07-16 17:20',
-    type: 'label',
+    wallet: 'labels',
+    type: 'charge',
     description: 'Outbound label ESC-70482',
     amount: '-$12.40',
-    balanceAfter: '$64,812.47',
+    balanceAfter: '$18,420.50',
   },
   {
     id: 'tx-2',
-    date: '2026-07-16 09:05',
-    type: 'top_up',
-    description: 'Card top-up',
-    amount: '+$3,500.00',
-    balanceAfter: '$64,824.87',
+    date: '2026-07-16 16:05',
+    wallet: 'cargo',
+    type: 'charge',
+    description: 'DHL air freight ESC-70422',
+    amount: '-$86.20',
+    balanceAfter: '$29,860.15',
   },
   {
     id: 'tx-3',
-    date: '2026-07-15 21:10',
-    type: 'fee',
-    description: 'Warehouse handling fee',
-    amount: '-$4.20',
-    balanceAfter: '$61,324.87',
+    date: '2026-07-16 09:05',
+    wallet: 'general',
+    type: 'top_up',
+    description: 'Card top-up to general wallet',
+    amount: '+$3,500.00',
+    balanceAfter: '$6,176.00',
   },
   {
     id: 'tx-4',
-    date: '2026-07-15 14:02',
-    type: 'refund',
-    description: 'Voided return label refund',
-    amount: '+$8.90',
-    balanceAfter: '$61,329.07',
+    date: '2026-07-15 21:10',
+    wallet: 'warehouse',
+    type: 'charge',
+    description: 'Warehouse handling fee',
+    amount: '-$4.20',
+    balanceAfter: '$7,140.00',
   },
   {
     id: 'tx-5',
+    date: '2026-07-15 18:40',
+    wallet: 'labels',
+    type: 'charge',
+    description: 'Outbound label ESC-70471',
+    amount: '-$11.90',
+    balanceAfter: '$18,432.90',
+  },
+  {
+    id: 'tx-6',
+    date: '2026-07-15 14:02',
+    wallet: 'returns',
+    type: 'refund',
+    description: 'Voided return label refund RTL-8870',
+    amount: '+$8.90',
+    balanceAfter: '$3,215.82',
+  },
+  {
+    id: 'tx-7',
     date: '2026-07-14 11:44',
-    type: 'label',
-    description: 'Return label ESC-R-8891',
+    wallet: 'returns',
+    type: 'charge',
+    description: 'Return label RTL-8891',
     amount: '-$9.10',
-    balanceAfter: '$61,320.17',
+    balanceAfter: '$3,206.92',
+  },
+  {
+    id: 'tx-8',
+    date: '2026-07-14 10:20',
+    wallet: 'cargo',
+    type: 'top_up',
+    description: 'Dedicated cargo wallet top-up',
+    amount: '+$5,000.00',
+    balanceAfter: '$29,946.35',
+  },
+  {
+    id: 'tx-9',
+    date: '2026-07-13 16:12',
+    wallet: 'general',
+    type: 'transfer',
+    description: 'Transfer general → labels',
+    amount: '-$1,000.00',
+    balanceAfter: '$2,676.00',
+  },
+  {
+    id: 'tx-10',
+    date: '2026-07-13 16:12',
+    wallet: 'labels',
+    type: 'transfer',
+    description: 'Transfer from general wallet',
+    amount: '+$1,000.00',
+    balanceAfter: '$18,444.80',
+  },
+  {
+    id: 'tx-11',
+    date: '2026-07-12 09:30',
+    wallet: 'warehouse',
+    type: 'top_up',
+    description: 'Warehouse wallet top-up',
+    amount: '+$1,200.00',
+    balanceAfter: '$7,144.20',
+  },
+  {
+    id: 'tx-12',
+    date: '2026-07-11 14:55',
+    wallet: 'cargo',
+    type: 'charge',
+    description: 'UPS ground ESC-70391',
+    amount: '-$42.75',
+    balanceAfter: '$24,946.35',
   },
 ]
 

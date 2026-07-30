@@ -15,6 +15,7 @@ import {
   Tag,
   RotateCcw,
   ClipboardList,
+  Receipt,
 } from 'lucide-react'
 import { NavLink, Link } from 'react-router-dom'
 
@@ -24,7 +25,8 @@ const mainNav = [
   { to: '/shipments', icon: ListOrdered, label: 'Shipping List' },
   { to: '/labels', icon: Tag, label: 'Labels' },
   { to: '/return-labels', icon: RotateCcw, label: 'Return Labels' },
-  { to: '/transactions', icon: Wallet, label: 'Transactions' },
+  { to: '/balance', icon: Wallet, label: 'Wallet' },
+  { to: '/transactions', icon: Receipt, label: 'Transactions' },
   { to: '/employees', icon: Users, label: 'Employees' },
   { to: '/ai', icon: Bot, label: 'AI Assistant' },
   { to: '/quote', icon: Calculator, label: 'Get Quote' },
