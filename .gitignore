@@ -1,0 +1,10 @@
+node_modules
+.next
+out
+.vercel
+*.log
+.env*.local
+data/store.json
+data/store.json.tmp
+public/uploads/*
+!public/uploads/.gitkeep
