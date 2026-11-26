@@ -1,5 +1,5 @@
 const REPO = "Keen59/Keen59.github.io";
-const BRANCH = "master";
+const BRANCH = "banking";
 const DATA_PATH = "marangoz/products.json";
 const TOKEN_KEY = "marangoz-github-token";
 const CART_KEY = "marangoz-sepet";
