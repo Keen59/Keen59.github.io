@@ -1,0 +1,54 @@
+{
+  "settings": {
+    "shopName": "Marangoz Atölyesi",
+    "tagline": "Masif ahşap, atölyeden kapınıza.",
+    "phone": "",
+    "about": "Küçük bir atölyede, masif ahşabı tek tek işliyoruz. Vitrindeki parçalar hazır. Ödeme, her ürünün Shopier sayfasında alınır."
+  },
+  "products": [
+    {
+      "id": "p-masa",
+      "name": "Meşe yemek masası",
+      "slug": "mese-yemek-masasi",
+      "description": "Düz çizgili, 180 × 90 cm meşe masa. Ayaklar geçmeli birleşir; yüzeyi mat yağ ile korunur. Altı kişi rahat oturur.",
+      "price": 24500,
+      "imageUrl": "https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?auto=format&fit=crop&w=1400&q=80",
+      "stock": 2,
+      "active": true,
+      "shopierUrl": ""
+    },
+    {
+      "id": "p-sehpa",
+      "name": "Ceviz yan sehpa",
+      "slug": "ceviz-yan-sehpa",
+      "description": "Koltuk yanına oturan ceviz sehpa. Üst tabla 45 cm, yükseklik 52 cm.",
+      "price": 4800,
+      "imageUrl": "https://images.unsplash.com/photo-1532372320572-cda25653a26d?auto=format&fit=crop&w=1400&q=80",
+      "stock": 4,
+      "active": true,
+      "shopierUrl": ""
+    },
+    {
+      "id": "p-tahta",
+      "name": "Ceviz kesme tahtası",
+      "slug": "ceviz-kesme-tahtasi",
+      "description": "Kalın ceviz bloktan kesme tahtası. Kenarında oluk var. Gıda ile temas eden yüzey yağlanır.",
+      "price": 950,
+      "imageUrl": "",
+      "stock": 12,
+      "active": true,
+      "shopierUrl": ""
+    },
+    {
+      "id": "p-raf",
+      "name": "Meşe duvar rafı",
+      "slug": "mese-duvar-rafi",
+      "description": "Meşe duvar rafı ve gizli taşıyıcılar. Kitap, seramik ve küçük çerçeveler için.",
+      "price": 1750,
+      "imageUrl": "https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?auto=format&fit=crop&w=1400&q=80",
+      "stock": 7,
+      "active": true,
+      "shopierUrl": ""
+    }
+  ]
+}
