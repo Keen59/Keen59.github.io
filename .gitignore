@@ -1,10 +1,5 @@
 node_modules
 .next
-out
-.vercel
-*.log
+.DS_Store
+Thumbs.db
 .env*.local
-data/store.json
-data/store.json.tmp
-public/uploads/*
-!public/uploads/.gitkeep
